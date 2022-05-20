@@ -8,7 +8,7 @@ Add-Member -InputObject $winStoreSave -MemberType NoteProperty -Name Store -Valu
 
 # Find steam save
 foreach ($drive in $drives) {
-    $steamLibrary = Get-ChildItem $drive.Root -Directory | Where-Object {$_.Name -eq 'SteamLibrary'} | Select-Object -First 1
+    $steamLibrary = Get-ChildItem $drive.Root -Directory | Where-Object {$_.Name -eq 'SteamLibrary' -or $_.Name -eq 'Steam_Library'} | Select-Object -First 1
 
     if ($steamLibrary -ne $null -and (Test-Path -Path "$($steamLibrary.FullName)\steamapps\common\Deep Rock Galactic\FSD\Saved\SaveGames")) {
         $mostRecentSave = Get-ChildItem "$($steamLibrary.FullName)\steamapps\common\Deep Rock Galactic\FSD\Saved\SaveGames" | Where-Object {$_.Name.EndsWith('Player.sav')} | Sort-Object -Descending -Property LastWriteTimeUtc | Select-Object -First 1
