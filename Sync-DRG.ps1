@@ -64,14 +64,44 @@ $commands = [PSCustomObject]@{
 }
 
 $commands | Format-Table Command, Description
-$command = Read-Host 'Enter one command from above'
 
-if ($command -eq 'exit') {
-    Exit
+$matchedCommand = $false
+while (-not $matchedCommand) {
+    $command = Read-Host 'Enter one command from above'
+    if ($command -eq 'exit') {
+        Exit
+    } elseif ($commands | where {$_.Command -eq $command}) {
+        $matchedCommand = $true
+        break
+    } else {
+        Write-Host "Could not understand '$command' (is it Elvish?). Please try again."
+    }
 }
 
-# TODO
-# Before actually transferring the save, make sure to create back up.
+$sourc = $null
+$dest = $null
 
-Write-Host "You selected '$command'. This is a dry run. No files were actually changed."
+if ($command -eq 'stm->win') {
+    $source = $steamSave.FileInfo
+    $dest = $winStoreSave.FileInfo
+} elseif ($command -eq 'win->stm') {
+    $source = $winStoreSave.FileInfo
+    $dest = $steamSave.FileInfo
+} else {
+    $source = $saves[0].FileInfo
+    $dest = $saves[1].FileInfo
+}
+
+
+Write-Host "You selected '$command'."
+
+# Make back up of destination file
+Write-Host "Making backup of $($dest.Name)..."
+Copy-Item -Path $dest.FullName -Destination "$($dest.FullName).bak"
+Write-Host "Backup created (.bak)"
+
+Write-Host 'Transferring save...'
+# Actual save transfer
+Copy-Item -Path $source.FullName -Destination $dest.FullName
+Write-Host 'Rock and stone! Transfer was successful.'
 Read-Host 'Press any key to close'

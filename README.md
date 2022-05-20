@@ -27,4 +27,4 @@ exit     Close the window
 Enter one command from above:
 ```
 
-Choose a command and run. Happy mining!
+Choose a command and run. Rock and stone!
