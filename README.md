@@ -28,3 +28,15 @@ Enter one command from above:
 ```
 
 Choose a command and run. Rock and stone!
+
+## Error: `cannot be loaded because running scripts is disabled on this system...`
+If you get the above error, you can do the following:
+1. Search for "powershell" in the Windows search bar.
+2. You will see PowerShell pop up. Click _Run as administrator_.
+3. In the window, type in:
+
+```powershell
+Set-ExecutionPolicy remotesigned
+```
+4. Press enter. Enter 'A' (Yes to all).
+5. Close the PowerShell window. Now try to run the script again.
